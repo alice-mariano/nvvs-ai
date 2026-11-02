@@ -8,21 +8,21 @@ version = "0.1.0"
 description = "nvvs.ai: detecção de temas de IA e engenharia de software em aceleração em fontes técnicas primárias"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
-# Só o que o M1 usa. Sem versão de propósito: depois da instalação,
-# as versões que o pip escolher são fixadas aqui a partir do `pip freeze` (RNF04).
+# Só o que o M1 usa. Versões fixadas a partir do `pip freeze` de 02/11/2026 (RNF04).
+# As dependências indiretas ficam travadas em requirements.lock.
 dependencies = [
-    "httpx",
-    "tenacity",
-    "psycopg[binary]",
-    "pydantic",
-    "pydantic-settings",
-    "typer",
+    "httpx==0.28.1",
+    "tenacity==9.2.1",
+    "psycopg[binary]==3.3.6",
+    "pydantic==2.14.2",
+    "pydantic-settings==2.16.2",
+    "typer==0.27.3",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
-    "ruff",
+    "pytest==9.2.0",
+    "ruff==0.17.3",
 ]
 
 [tool.setuptools.packages.find]
