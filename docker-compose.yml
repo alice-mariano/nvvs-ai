@@ -1,0 +1,27 @@
+services:
+  db:
+    # Versão fixada: pgvector 0.8.2 (corrige a CVE-2026-3172) sobre PostgreSQL 18
+    image: pgvector/pgvector:0.8.2-pg18
+    container_name: nvvs-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?defina POSTGRES_USER no .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}
+      POSTGRES_DB: ${POSTGRES_DB:?defina POSTGRES_DB no .env}
+      # Tudo em UTC (achado K3 da revisão R0)
+      TZ: UTC
+      PGTZ: UTC
+    ports:
+      # 127.0.0.1: o banco só aceita conexões do seu próprio PC, não da rede
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      # No PostgreSQL 18 a imagem guarda os dados em /var/lib/postgresql/18/docker,
+      # por isso o volume é montado em /var/lib/postgresql (e não em .../data)
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

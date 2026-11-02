@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nvvs"
+version = "0.1.0"
+description = "nvvs.ai: detecção de temas de IA e engenharia de software em aceleração em fontes técnicas primárias"
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+# Só o que o M1 usa. Sem versão de propósito: depois da instalação,
+# as versões que o pip escolher são fixadas aqui a partir do `pip freeze` (RNF04).
+dependencies = [
+    "httpx",
+    "tenacity",
+    "psycopg[binary]",
+    "pydantic",
+    "pydantic-settings",
+    "typer",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
