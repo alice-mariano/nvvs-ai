@@ -1,0 +1,35 @@
+# --- Segredos (nunca vão para o Git) ---
+.env
+.env.*
+!.env.example
+
+# --- Ambiente Python ---
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# --- Ferramentas ---
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Dados locais do banco e dumps (repositório público) ---
+data/
+pgdata/
+backups/
+*.dump
+*.backup
+*.sql.gz
+dump*.sql
+
+# --- Editores e sistema ---
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
