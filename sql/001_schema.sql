@@ -34,3 +34,22 @@ CREATE TABLE IF NOT EXISTS items (
 
 CREATE INDEX IF NOT EXISTS items_published_at_idx ON items (published_at);
 CREATE INDEX IF NOT EXISTS items_canonical_key_idx ON items (canonical_key);
+
+
+CREATE TABLE IF NOT EXISTS collection_windows (
+    id                 bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    source_id          smallint NOT NULL REFERENCES sources(id),
+    window_start       timestamptz NOT NULL,
+    window_end         timestamptz NOT NULL,
+    status             text NOT NULL CHECK (status IN ('running', 'done', 'partial', 'failed')),
+    reported_total     integer,
+    fetched            integer NOT NULL DEFAULT 0,
+    inserted           integer NOT NULL DEFAULT 0,
+    pages              integer NOT NULL DEFAULT 0,
+    started_at         timestamptz NOT NULL DEFAULT now(),
+    finished_at        timestamptz,
+    error              text,
+    UNIQUE (source_id, window_start),
+    CHECK (window_end > window_start)
+);
+
