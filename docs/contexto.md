@@ -93,7 +93,8 @@ O nvvs.ai detecta temas de IA e engenharia de software que estão **acelerando**
 
 ## Decisões da revisão R0 (já aplicadas)
 
-- A API da Algolia limita cada consulta a 1.000 resultados: a janela é dividida ao meio até caber, com mínimo de 1 hora; acima disso, o dia fica `partial`.
+- A API da Algolia limita cada consulta a 1.000 resultados: a janela é dividida ao meio até caber, enquanto for maior que 1 hora (a menor consulta tem entre 30 e 60 minutos); se ainda passar do limite, o dia fica `partial`.
+- Uma URL malformada não derruba a gravação do dia: a chave canônica do item cai para `<fonte>:<id>` (R1).
 - Datas em `timestamptz` UTC, janelas semiabertas `[início, fim)`, semana ISO fechada.
 - Sem filtro de pontos na coleta; o recorte de escopo (IA e engenharia de software) fica na análise.
 - O texto usado no embedding terá contrato versionado no M2 (prefixo `query: ` do E5 para agrupamento).

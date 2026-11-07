@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, date, datetime, timedelta
 
 import psycopg
+from psycopg.rows import tuple_row
 from psycopg.types.json import Jsonb
 
 from nvvs.canonical import CANONICAL_VERSION, canonical_key
@@ -94,15 +95,17 @@ def default_since(now: datetime, weeks: int = 12) -> date:
 def _finished_days(conn: psycopg.Connection, sid: int, windows: list[Window]) -> set[datetime]:
     if not windows:
         return set()
-    rows = conn.execute(
-        """
-        SELECT window_start FROM collection_windows
-        WHERE source_id = %s AND status IN ('done', 'partial')
-          AND window_start >= %s AND window_start < %s
-        """,
-        (sid, windows[0].start, windows[-1].end),
-    ).fetchall()
-    return {row["window_start"] for row in rows}
+    # Cursor de tuplas explícito: a função não depende do row_factory da conexão (R1-03)
+    with conn.cursor(row_factory=tuple_row) as cur:
+        rows = cur.execute(
+            """
+            SELECT window_start FROM collection_windows
+            WHERE source_id = %s AND status IN ('done', 'partial')
+              AND window_start >= %s AND window_start < %s
+            """,
+            (sid, windows[0].start, windows[-1].end),
+        ).fetchall()
+    return {row[0] for row in rows}
 
 
 def _insert_items(

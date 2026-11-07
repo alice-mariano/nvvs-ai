@@ -61,12 +61,38 @@ def test_items_exactly_on_the_split_border_are_counted_once():
     assert len(result.items) == 1105
 
 
+class SpyCollector(FakeCollector):
+    """Registra a duração de cada janela consultada."""
+
+    def __init__(self, timestamps: list[datetime]):
+        super().__init__(timestamps)
+        self.durations: list[timedelta] = []
+
+    def fetch_page(self, window: Window, page: int) -> Page:
+        self.durations.append(window.duration)
+        return super().fetch_page(window, page)
+
+
 def test_burst_inside_min_window_is_marked_partial():
     burst = [DAY.start + timedelta(minutes=10)] * 1500  # 1.500 itens no mesmo minuto
-    result = collect_window(FakeCollector(burst), DAY)
+    collector = SpyCollector(burst)
+    result = collect_window(collector, DAY)
     assert result.partial
     assert len(result.items) == 1000  # o que a API deixou buscar
     assert result.reported_total == 1500
+    # A divisão para em 45 min: nunca consulta janela menor que metade do mínimo (R1-01)
+    assert min(collector.durations) == timedelta(minutes=45)
+
+
+def test_window_of_90_minutes_is_split_once_more_and_loses_nothing():
+    # R1-01: 90 min é maior que o mínimo de 1 h, então ainda é dividida em duas de 45 min
+    window = Window(DAY.start, DAY.start + timedelta(minutes=90))
+    collector = SpyCollector(spread(1500, window))
+    result = collect_window(collector, window)
+    assert len(result.items) == 1500
+    assert not result.partial
+    assert min(collector.durations) == timedelta(minutes=45)
+    assert all(d >= collector.min_window / 2 for d in collector.durations)
 
 
 def test_closed_days_never_include_today_and_use_utc():

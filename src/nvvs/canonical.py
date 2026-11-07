@@ -54,14 +54,22 @@ def _url_key(host: str, path: str, query: str) -> str:
 
 
 def canonical_key(url: str | None, source_slug: str, external_id: str) -> str:
-    """Devolve a chave canônica de um item. Sem URL, usa o id da própria fonte."""
+    """Devolve a chave canônica de um item. Sem URL válida, usa o id da própria fonte.
+
+    Nunca lança exceção: uma URL malformada só perde a deduplicação entre fontes daquele
+    item, e o item continua sendo gravado (R1, R1-02).
+    """
+    fallback = f"{source_slug}:{external_id}"
     if not url or not url.strip():
-        return f"{source_slug}:{external_id}"
+        return fallback
 
     raw = url.strip()
     if "://" not in raw:
         raw = "https://" + raw
-    parts_url = urlsplit(raw)
+    try:
+        parts_url = urlsplit(raw)
+    except ValueError:  # por exemplo "http://[", que o urlsplit lê como IPv6 inválido
+        return fallback
     host = _host(parts_url.netloc)
     parts = [p for p in parts_url.path.split("/") if p]
 

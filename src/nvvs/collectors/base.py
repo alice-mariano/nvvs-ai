@@ -83,6 +83,8 @@ class WindowResult:
 class Collector(ABC):
     slug: str
     max_results: int = 1000  # limite de resultados por consulta da API (R0, K2)
+    # Só janelas MAIORES que isto são divididas. Por isso a menor janela consultada fica
+    # entre min_window / 2 e min_window: de 24 h, a divisão vai a 12, 6, 3, 1,5 h e 45 min (R1-01).
     min_window: timedelta = timedelta(hours=1)
 
     @abstractmethod
@@ -91,7 +93,11 @@ class Collector(ABC):
 
 
 def collect_window(collector: Collector, window: Window) -> WindowResult:
-    """Coleta uma janela inteira, dividindo-a ao meio enquanto passar do limite da API."""
+    """Coleta uma janela inteira, dividindo-a ao meio enquanto passar do limite da API.
+
+    Condição de parada: o total cabe em max_results, ou a janela já não é maior que min_window.
+    No segundo caso, o resultado sai marcado como partial.
+    """
     first = collector.fetch_page(window, 0)
 
     if first.total > collector.max_results and window.duration > collector.min_window:

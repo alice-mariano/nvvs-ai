@@ -38,3 +38,9 @@ def test_canonical_key_from_url(url, expected):
 @pytest.mark.parametrize("url", [None, "", "   "])
 def test_canonical_key_without_url_uses_source_id(url):
     assert canonical_key(url, "hn", "40000002") == "hn:40000002"
+
+
+@pytest.mark.parametrize("url", ["http://[", "https://[::1/x"])
+def test_malformed_url_falls_back_to_source_id_instead_of_raising(url):
+    # R1-02: uma URL quebrada não pode derrubar a gravação do dia inteiro
+    assert canonical_key(url, "hn", "40000009") == "hn:40000009"
