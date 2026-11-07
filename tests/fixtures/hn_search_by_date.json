@@ -1,0 +1,52 @@
+{
+  "hits": [
+    {
+      "_highlightResult": {"title": {"value": "Show HN: A tiny vector database", "matchLevel": "none"}},
+      "_tags": ["story", "author_alice", "story_40000003", "show_hn"],
+      "author": "alice",
+      "children": [40000010, 40000011],
+      "created_at": "2026-10-27T23:58:49Z",
+      "created_at_i": 1793145529,
+      "num_comments": 2,
+      "objectID": "40000003",
+      "points": 12,
+      "story_id": 40000003,
+      "title": "Show HN: A tiny vector database",
+      "updated_at": "2026-11-02T10:00:00Z",
+      "url": "https://github.com/Alice/TinyVec.git"
+    },
+    {
+      "_highlightResult": {"title": {"value": "Ask HN: How do you track new AI papers?", "matchLevel": "none"}},
+      "_tags": ["story", "author_bob", "story_40000002", "ask_hn"],
+      "author": "bob",
+      "created_at": "2026-10-27T12:00:00Z",
+      "created_at_i": 1793102400,
+      "num_comments": 0,
+      "objectID": "40000002",
+      "points": 1,
+      "story_id": 40000002,
+      "story_text": "I read arXiv every morning.\u0000 Is there a better way?",
+      "title": "Ask HN: How do you track new AI papers?",
+      "updated_at": "2026-10-27T12:00:00Z"
+    },
+    {
+      "_highlightResult": {},
+      "_tags": ["story", "author_carol", "story_40000001"],
+      "author": "carol",
+      "created_at": "2026-10-27T00:00:00Z",
+      "created_at_i": 1793059200,
+      "num_comments": null,
+      "objectID": "40000001",
+      "points": null,
+      "story_id": 40000001,
+      "title": "",
+      "updated_at": "2026-10-27T00:00:00Z",
+      "url": "https://example.com/deleted"
+    }
+  ],
+  "hitsPerPage": 1000,
+  "nbHits": 3,
+  "nbPages": 1,
+  "page": 0,
+  "query": ""
+}
