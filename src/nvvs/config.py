@@ -12,7 +12,11 @@ class Settings(BaseSettings):
     postgres_user: str
     postgres_password: str
     postgres_db: str
-    postgres_host: str = "localhost"
+    # 127.0.0.1 e não "localhost": no Windows, "localhost" tenta primeiro o IPv6 (::1), onde o
+    # Docker não publica a porta, e cada conexão esperava ~130 s antes de cair no IPv4 (08/11).
+    postgres_host: str = "127.0.0.1"
+    # Segundos por tentativa de conexão: um banco fora do ar falha com mensagem, não trava
+    postgres_connect_timeout_s: int = 10
     postgres_port: int = 5433
 
     nvvs_user_agent: str = "nvvs.ai/0.1"
@@ -28,6 +32,7 @@ class Settings(BaseSettings):
             dbname=self.postgres_db,
             user=self.postgres_user,
             password=self.postgres_password,
+            connect_timeout=self.postgres_connect_timeout_s,
         )
 
 
