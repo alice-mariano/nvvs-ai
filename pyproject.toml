@@ -8,15 +8,21 @@ version = "0.1.0"
 description = "nvvs.ai: detecção de temas de IA e engenharia de software em aceleração em fontes técnicas primárias"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
-# Só o que o M1 usa. Versões fixadas a partir do `pip freeze` de 02/11/2026 (RNF04).
-# As dependências indiretas ficam travadas em requirements.lock.
+# Versões fixadas (RNF04); as dependências indiretas ficam travadas em requirements.lock.
 dependencies = [
+    # M1: coleta (pip freeze de 02/11/2026)
     "httpx==0.28.1",
     "tenacity==9.2.1",
     "psycopg[binary]==3.3.6",
     "pydantic==2.14.2",
     "pydantic-settings==2.16.2",
     "typer==0.27.3",
+    # M2: embeddings locais (versões do PyPI em 08/11/2026). No Windows, o torch do PyPI
+    # é a versão só para CPU; no Linux ele traz CUDA, então lá instale antes o torch da
+    # página de CPU: pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+    "sentence-transformers==6.2.0",
+    "torch==2.15.0",
+    "pgvector==0.5.1",
 ]
 
 [project.scripts]
