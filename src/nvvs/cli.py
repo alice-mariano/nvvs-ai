@@ -1,4 +1,4 @@
-"""Linha de comando do nvvs.ai. Uso: nvvs collect hn [--desde AAAA-MM-DD] [--ate AAAA-MM-DD]"""
+"""Linha de comando do nvvs.ai. Uso: nvvs collect <fonte> [--desde AAAA-MM-DD] [--ate AAAA-MM-DD]"""
 
 import time
 from datetime import UTC, date, datetime
@@ -29,8 +29,9 @@ def _parse_date(value: str | None, name: str) -> date | None:
 
 
 def _print_day(report: DayReport) -> None:
+    total = "-" if report.reported_total is None else report.reported_total
     line = (
-        f"{report.day}  {report.status:<7}  total={report.reported_total:>5}  "
+        f"{report.day}  {report.status:<7}  total={total:>5}  "
         f"recebidos={report.fetched:>5}  inseridos={report.inserted:>5}  paginas={report.pages}"
     )
     if report.error:
@@ -40,7 +41,7 @@ def _print_day(report: DayReport) -> None:
 
 @app.command()
 def collect(
-    fonte: str = typer.Argument(help="Fonte a coletar, por exemplo: hn"),
+    fonte: str = typer.Argument(help="Fonte a coletar: hn ou hf_papers"),
     desde: str | None = typer.Option(
         None, help="Primeiro dia (UTC), AAAA-MM-DD. Padrão: segunda-feira de 12 semanas atrás."
     ),

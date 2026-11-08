@@ -55,4 +55,4 @@ class HackerNewsCollector(Collector):
         }
         data = get_json(self.client, API_URL, params, self.pause_s, self.retry_wait_s)
         items = [item for hit in data["hits"] if (item := normalize_hit(hit)) is not None]
-        return Page(total=data["nbHits"], items=items, nb_pages=data["nbPages"])
+        return Page(total=data["nbHits"], items=items, has_more=page + 1 < data["nbPages"])

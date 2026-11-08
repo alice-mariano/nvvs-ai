@@ -2,6 +2,8 @@
 
 from datetime import UTC, date, datetime, timedelta
 
+import pytest
+
 from nvvs.collect import closed_days, default_since
 from nvvs.collectors.base import Collector, NormalizedItem, Page, Window, collect_window
 
@@ -28,7 +30,7 @@ class FakeCollector(Collector):
         self.calls += 1
         inside = [it for it in self.items if window.start <= it.published_at < window.end]
         inside.sort(key=lambda it: it.published_at, reverse=True)  # mais novos primeiro
-        return Page(total=len(inside), items=inside[: self.max_results], nb_pages=1)
+        return Page(total=len(inside), items=inside[: self.max_results])
 
 
 def spread(n: int, window: Window) -> list[datetime]:
@@ -112,3 +114,54 @@ def test_default_since_is_monday_twelve_weeks_back():
     since = default_since(now)
     assert since == date(2026, 8, 10)
     assert since.weekday() == 0
+
+
+class PagedCollector(Collector):
+    """Imita o HF Daily Papers: sem total, páginas de tamanho fixo, a próxima só se esta veio cheia."""
+
+    slug = "paged"
+    page_size = 3
+
+    def __init__(self, n: int, ignore_page_number: bool = False):
+        self.items = [make_item(i, DAY.start) for i in range(n)]
+        self.ignore_page_number = ignore_page_number
+        self.pages_asked: list[int] = []
+
+    def fetch_page(self, window: Window, page: int) -> Page:
+        self.pages_asked.append(page)
+        p = 0 if self.ignore_page_number else page
+        chunk = self.items[p * self.page_size : (p + 1) * self.page_size]
+        return Page(total=None, items=chunk, has_more=len(chunk) == self.page_size)
+
+
+def test_unknown_total_pages_until_a_short_page():
+    collector = PagedCollector(7)  # 3 + 3 + 1
+    result = collect_window(collector, DAY)
+    assert len(result.items) == 7
+    assert collector.pages_asked == [0, 1, 2]
+    assert result.pages == 3
+    assert result.reported_total is None
+    assert not result.partial  # sem total não há limite a estourar
+
+
+def test_unknown_total_with_exact_multiple_asks_one_empty_page():
+    collector = PagedCollector(6)  # 3 + 3 + página vazia
+    result = collect_window(collector, DAY)
+    assert len(result.items) == 6
+    assert collector.pages_asked == [0, 1, 2]
+
+
+def test_unknown_total_is_never_split():
+    collector = PagedCollector(2000)
+    collector.page_size = 1000
+    result = collect_window(collector, DAY)
+    assert len(result.items) == 2000
+    assert set(collector.pages_asked) == {0, 1, 2}  # só paginou; nenhuma sub-janela
+
+
+def test_pagination_that_never_ends_fails_loudly():
+    # Uma API que ignora o número da página devolve sempre a primeira, cheia
+    collector = PagedCollector(10, ignore_page_number=True)
+    with pytest.raises(RuntimeError, match="paginação não terminou"):
+        collect_window(collector, DAY)
+    assert len(collector.pages_asked) == collector.max_pages

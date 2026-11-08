@@ -54,7 +54,7 @@ WHERE source_id = %s AND window_start = %s
 class DayReport:
     day: date
     status: str
-    reported_total: int = 0
+    reported_total: int | None = None  # None: a API não informa total (HF Daily Papers)
     fetched: int = 0
     inserted: int = 0
     pages: int = 0

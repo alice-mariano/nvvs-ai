@@ -90,6 +90,23 @@ O nvvs.ai detecta temas de IA e engenharia de software que estão **acelerando**
 | 012 | Divisão de autoria: infraestrutura, coletores, CLI e testes por um assistente; esquema SQL, agrupamento e métrica pela autora. |
 | 013 | Coleta por dia UTC fechado, com checkpoint por janela em `collection_windows`; a coleta refaz todo dia que não esteja concluído. |
 | 014 | Chave canônica versionada: `arxiv:<id>`, `github:<dono>/<repo>`, `<fonte>:<id>` sem URL, `url:<url normalizada>`. |
+| 015 | No HF Daily Papers, `published_at` é o dia da lista em que o artigo entrou (`paper.submittedOnDailyAt`, sempre 00:00 UTC), não a data do arXiv, que fica em `metrics.arxiv_published_at`. |
+
+## Fontes da V1
+
+| Fonte (`slug`) | Endpoint | Consulta | Paginação e limites |
+| --- | --- | --- | --- |
+| Hacker News (`hn`) | `hn.algolia.com/api/v1/search_by_date`, sem chave | `tags=story`, filtro numérico `created_at_i` em `[início, fim)` | `nbHits` e `nbPages` na resposta; até 1.000 resultados por consulta (janela dividida, ver abaixo); cerca de 10.000 req/h por IP. |
+| HF Daily Papers (`hf_papers`) | `huggingface.co/api/daily_papers`, sem chave | `date=AAAA-MM-DD` (um dia inteiro), `sort=publishedAt` | Lista sem total: a próxima página (`p`) só é pedida se esta veio cheia (`limit=100`); trava de 50 páginas por dia. Hub: 500 req de API a cada 5 min por IP anônimo. |
+
+Cuidados do HF Daily Papers:
+- A janela precisa ser exatamente um dia UTC; o coletor recusa qualquer outra.
+- `reported_total` fica nulo em `collection_windows`: a API não informa total.
+- A URL gravada é `huggingface.co/papers/<id>`, então a chave canônica é `arxiv:<id>`, a mesma de um link do arXiv no HN: o mesmo artigo nas duas fontes conta uma vez em n_t.
+- Entrada sem `submittedOnDailyAt` faz o dia falhar com mensagem, em vez de gravar data errada.
+- Medido na sonda (05/11): `submittedOnDailyAt` é a data da lista, às 00:00 UTC, para todos os artigos; a data do arXiv ia até 9 dias antes. Sábado e domingo não têm lista: cada semana ISO tem as listas de segunda a sexta.
+- A verificar: se a lista de um dia já encerrado continua recebendo artigos (rodar a sonda de novo no mesmo dia uma semana depois e comparar a contagem).
+- Upvotes, comentários e estrelas são uma foto do momento da coleta, como os pontos do HN.
 
 ## Decisões da revisão R0 (já aplicadas)
 

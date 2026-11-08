@@ -1,0 +1,56 @@
+[
+  {
+    "paper": {
+      "id": "2611.01234",
+      "authors": [
+        {"_id": "a1", "name": "Ana Exemplo", "hidden": false},
+        {"_id": "a2", "name": "Bruno Teste", "hidden": false}
+      ],
+      "publishedAt": "2026-11-03T17:59:58.000Z",
+      "submittedOnDailyAt": "2026-11-05T00:00:00.000Z",
+      "title": "TinyRAG: Retrieval\n  for Small Models",
+      "summary": "We study retrieval-augmented generation for small models.",
+      "upvotes": 42,
+      "discussionId": "d1",
+      "githubRepo": "https://github.com/exemplo/tinyrag",
+      "githubStars": 310,
+      "ai_summary": "Resumo gerado pelo HF.",
+      "ai_keywords": ["retrieval", "small models"]
+    },
+    "publishedAt": "2026-11-03T17:59:58.000Z",
+    "title": "TinyRAG: Retrieval\n  for Small Models",
+    "summary": "We study retrieval-augmented generation for small models.",
+    "thumbnail": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.01234.png",
+    "numComments": 3,
+    "submittedBy": {"_id": "u1", "fullname": "Carla Exemplo", "name": "carla", "type": "user"},
+    "isAuthorParticipating": false
+  },
+  {
+    "paper": {
+      "id": "2611.05678",
+      "authors": [],
+      "publishedAt": "2026-11-04T10:00:00.000Z",
+      "title": "Agents\u0000 that Plan",
+      "summary": "An agent benchmark.\u0000",
+      "upvotes": 5,
+      "discussionId": "d2"
+    },
+    "submittedOnDailyAt": "2026-11-05T00:00:00.000Z",
+    "publishedAt": "2026-11-04T10:00:00.000Z",
+    "title": "Agents\u0000 that Plan",
+    "summary": "An agent benchmark.\u0000",
+    "numComments": 0
+  },
+  {
+    "paper": {
+      "id": "2611.09999",
+      "publishedAt": "2026-11-04T10:00:00.000Z",
+      "submittedOnDailyAt": "2026-11-05T00:00:00.000Z",
+      "summary": "Sem título.",
+      "upvotes": 1
+    },
+    "publishedAt": "2026-11-04T10:00:00.000Z",
+    "summary": "Sem título.",
+    "numComments": 0
+  }
+]

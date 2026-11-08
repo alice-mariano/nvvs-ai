@@ -75,6 +75,20 @@ def test_retries_on_429_then_succeeds():
     assert page.total == 3
 
 
+def test_each_retry_is_logged_with_the_reason(caplog):
+    calls = {"n": 0}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls["n"] += 1
+        return httpx.Response(429) if calls["n"] < 3 else httpx.Response(200, json=FIXTURE)
+
+    with caplog.at_level("WARNING", logger="nvvs"):
+        make_collector(handler).fetch_page(DAY, 0)
+    retries = [r.getMessage() for r in caplog.records]
+    assert len(retries) == 2  # duas falhas antes do sucesso
+    assert all("HTTP 429" in m for m in retries)
+
+
 def test_does_not_retry_on_400():
     calls = {"n": 0}
 
