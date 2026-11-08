@@ -15,7 +15,7 @@ VALUES ('hn', 'Hacker News (Algolia)', 'https://hn.algolia.com/api/v1')
 ON CONFLICT (slug) DO NOTHING;
 
 INSERT INTO sources (slug, name, base_url)
-VALUES ('hf_papers', 'Hugging Face Daily Paper', 'https://huggingface.co/api')
+VALUES ('hf_papers', 'Hugging Face Daily Papers', 'https://huggingface.co/api')
 ON CONFLICT (slug) DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS items (
