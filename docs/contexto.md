@@ -105,7 +105,8 @@ Cuidados do HF Daily Papers:
 - A URL gravada é `huggingface.co/papers/<id>`, então a chave canônica é `arxiv:<id>`, a mesma de um link do arXiv no HN: o mesmo artigo nas duas fontes conta uma vez em n_t.
 - Entrada sem `submittedOnDailyAt` faz o dia falhar com mensagem, em vez de gravar data errada.
 - Medido na sonda (05/11): `submittedOnDailyAt` é a data da lista, às 00:00 UTC, para todos os artigos; a data do arXiv ia até 9 dias antes. Sábado e domingo não têm lista: cada semana ISO tem as listas de segunda a sexta.
-- A verificar: se a lista de um dia já encerrado continua recebendo artigos (rodar a sonda de novo no mesmo dia uma semana depois e comparar a contagem).
+- Um item com `submittedOnDailyAt` fora do dia pedido faz o dia falhar com mensagem (R2-02).
+- A verificar antes do README: se a lista de um dia já encerrado continua recebendo artigos. Teste: `nvvs collect hf_papers --desde D --ate D2 --refazer` em dias já coletados; "inseridos" acima de zero indica acréscimo tardio (R2-01).
 - Upvotes, comentários e estrelas são uma foto do momento da coleta, como os pontos do HN.
 
 ## Teste de modelo e texto (08 e 09/11)

@@ -104,3 +104,15 @@ def test_does_not_retry_on_400():
 def test_window_rejects_naive_datetimes():
     with pytest.raises(ValueError):
         Window(datetime(2026, 10, 27), datetime(2026, 10, 27) + timedelta(days=1))
+
+
+@pytest.mark.parametrize(
+    ("page", "nb_pages", "expected"), [(0, 3, True), (1, 3, True), (2, 3, False)]
+)
+def test_has_more_follows_nb_pages(page, nb_pages, expected):
+    # R2-03: a paginação do HN vem do nbPages da Algolia
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.params["page"] == str(page)
+        return httpx.Response(200, json={**FIXTURE, "nbPages": nb_pages})
+
+    assert make_collector(handler).fetch_page(DAY, page).has_more is expected

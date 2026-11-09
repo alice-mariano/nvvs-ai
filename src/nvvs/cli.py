@@ -53,8 +53,16 @@ def collect(
     ate: str | None = typer.Option(
         None, help="Dia final, exclusivo (UTC), AAAA-MM-DD. Padrão: hoje (só dias fechados)."
     ),
+    refazer: bool = typer.Option(
+        False,
+        "--refazer",
+        help="Refaz também os dias já concluídos do intervalo; só itens novos entram (R2-01). "
+        "Exige --desde.",
+    ),
 ) -> None:
     """Coleta os dias UTC fechados do intervalo que ainda não foram concluídos."""
+    if refazer and desde is None:
+        raise typer.BadParameter("--refazer exige --desde, para não refazer 12 semanas sem querer")
     now = datetime.now(UTC)
     since = _parse_date(desde, "--desde") or default_since(now)
     until = _parse_date(ate, "--ate") or now.date()
@@ -62,7 +70,8 @@ def collect(
         raise typer.BadParameter("--ate precisa ser depois de --desde")
 
     settings = get_settings()
-    typer.echo(f"Coletando '{fonte}' de {since} até {until} (exclusivo), em UTC.")
+    modo = ", refazendo os dias já concluídos" if refazer else ""
+    typer.echo(f"Coletando '{fonte}' de {since} até {until} (exclusivo), em UTC{modo}.")
     started = time.monotonic()
 
     headers = {"User-Agent": settings.nvvs_user_agent}
@@ -72,7 +81,9 @@ def collect(
         except KeyError as exc:
             raise typer.BadParameter(exc.args[0], param_hint="fonte") from None
         with connect() as conn:
-            summary = run_collection(conn, collector, since, until, now=now, on_day=_print_day)
+            summary = run_collection(
+                conn, collector, since, until, now=now, on_day=_print_day, redo=refazer
+            )
 
     elapsed = time.monotonic() - started
     inserted = sum(d.inserted for d in summary.days)

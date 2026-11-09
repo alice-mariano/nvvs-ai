@@ -109,6 +109,14 @@ class HFPapersCollector(Collector):
             )
 
         items = [item for entry in data if (item := normalize_entry(entry)) is not None]
+        for item in items:
+            # A sonda mediu a data sempre dentro do dia pedido. Se a API mudar, o dia falha com
+            # a mensagem, em vez de gravar o item em outra semana sem aviso (R2-02).
+            if not window.start <= item.published_at < window.end:
+                raise ValueError(
+                    f"paper.id={item.external_id}: submittedOnDailyAt {item.published_at:%Y-%m-%d} "
+                    f"fora do dia pedido {window.start:%Y-%m-%d}"
+                )
         # A API não informa total: has_more olha o tamanho BRUTO da página, antes de descartar
         # entradas sem título, senão uma página cheia com um descarte pararia a paginação.
         return Page(total=None, items=items, has_more=len(data) == PAGE_SIZE)

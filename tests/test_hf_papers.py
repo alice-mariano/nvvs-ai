@@ -137,3 +137,13 @@ def test_retries_on_503_then_succeeds():
     page = make_collector(handler).fetch_page(DAY, 0)
     assert calls["n"] == 2
     assert len(page.items) == 2
+
+
+@pytest.mark.parametrize("when", ["2026-11-04T00:00:00.000Z", "2026-11-06T00:00:00.000Z"])
+def test_entry_dated_outside_the_requested_day_fails_the_day(when):
+    # R2-02: uma data fora do dia pedido não pode ir para outra semana sem aviso
+    entry = json.loads(json.dumps(FIXTURE[0]))
+    entry["paper"]["submittedOnDailyAt"] = when
+    collector = make_collector(lambda r: httpx.Response(200, json=[entry]))
+    with pytest.raises(ValueError, match="fora do dia pedido 2026-11-05"):
+        collector.fetch_page(DAY, 0)

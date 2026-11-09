@@ -4,7 +4,10 @@ Regras (ADR-013, R0 K1):
 - só entram dias já encerrados em UTC; o dia de hoje nunca;
 - um dia só vira 'done' (ou 'partial') depois de todos os itens gravados, na mesma transação;
 - a coleta refaz todo dia do intervalo que não esteja 'done' ou 'partial', inclusive buracos;
-- refazer é seguro: ON CONFLICT (source_id, external_id) DO NOTHING.
+- refazer é seguro: ON CONFLICT (source_id, external_id) DO NOTHING;
+- com redo=True (nvvs collect --refazer), os dias concluídos do intervalo também são refeitos.
+  Serve para recuperar itens que a fonte acrescentou depois (R2-01): entram só os novos, os já
+  gravados ficam como estão. Correções da fonte num item existente (A -> A') não são aplicadas.
 """
 
 from collections.abc import Callable
@@ -184,12 +187,13 @@ def run_collection(
     until: date,
     now: datetime | None = None,
     on_day: Callable[[DayReport], None] | None = None,
+    redo: bool = False,
 ) -> CollectionSummary:
-    """Coleta todos os dias fechados de [since, until) que ainda não foram concluídos."""
+    """Coleta os dias fechados de [since, until) ainda não concluídos (todos, se redo=True)."""
     now = now or datetime.now(UTC)
     sid = source_id(conn, collector.slug)
     windows = closed_days(since, until, now)
-    finished = _finished_days(conn, sid, windows)
+    finished = set() if redo else _finished_days(conn, sid, windows)
     conn.commit()
 
     summary = CollectionSummary()

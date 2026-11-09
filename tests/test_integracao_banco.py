@@ -146,3 +146,28 @@ def test_collection_resumes_skips_done_days_and_never_duplicates(conn):
     assert rows[0]["reported_total"] == 1200 and rows[0]["pages"] == 3
     assert all(r["status"] == "done" for r in rows)
     assert rows[-1]["window_start"] + timedelta(days=1) <= NOW
+
+
+def test_redo_recovers_items_the_source_added_later(conn):
+    # R2-01: a fonte acrescenta um item a um dia já concluído (A -> A + B)
+    api = FakeAlgolia()
+    collector = HackerNewsCollector(
+        httpx.Client(transport=httpx.MockTransport(api)), pause_s=0, retry_wait_s=0
+    )
+    day, next_day = date(2026, 10, 28), date(2026, 10, 29)
+    run_collection(conn, collector, day, next_day, now=NOW)
+    before = _count(conn, "SELECT count(*) AS n FROM items")
+
+    late = int(datetime(2026, 10, 28, 20, tzinfo=UTC).timestamp())
+    api.stories.append({"objectID": "777001", "title": "Late", "url": None, "created_at_i": late})
+
+    # Sem refazer, o dia concluído é pulado e o item novo não entra
+    skipped = run_collection(conn, collector, day, next_day, now=NOW)
+    assert skipped.skipped == 1 and skipped.days == []
+    assert _count(conn, "SELECT count(*) AS n FROM items") == before
+
+    # Refazendo, só o item novo entra; nada duplica
+    redone = run_collection(conn, collector, day, next_day, now=NOW, redo=True)
+    assert [(d.status, d.inserted) for d in redone.days] == [("done", 1)]
+    assert _count(conn, "SELECT count(*) AS n FROM items") == before + 1
+    assert _count(conn, "SELECT count(*) AS n FROM items WHERE external_id = '777001'") == 1
