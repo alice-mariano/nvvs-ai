@@ -3,6 +3,8 @@ services:
     # Versão fixada: pgvector 0.8.2 (corrige a CVE-2026-3172) sobre PostgreSQL 18
     image: pgvector/pgvector:0.8.2-pg18
     container_name: nvvs-db
+    # Sobe sozinho quando o Docker Desktop abre, salvo se você parou com `docker compose stop`
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:?defina POSTGRES_USER no .env}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}

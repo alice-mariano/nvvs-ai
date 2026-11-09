@@ -6,9 +6,12 @@ Uso:
 """
 
 import time
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import UTC, date, datetime
 
 import httpx
+import psycopg
 import typer
 
 from nvvs.collect import DayReport, default_since, run_collection
@@ -42,6 +45,25 @@ def _print_day(report: DayReport) -> None:
     if report.error:
         line += f"  erro={report.error}"
     typer.echo(line)
+
+
+@contextmanager
+def _banco() -> Iterator[psycopg.Connection]:
+    """Abre a conexão; se o banco não responder, explica o que fazer em vez do traceback."""
+    try:
+        conn = connect()
+    except psycopg.OperationalError as exc:
+        settings = get_settings()
+        typer.echo(
+            f"Não consegui conectar ao banco em {settings.postgres_host}:{settings.postgres_port} "
+            f"({type(exc).__name__}).\n"
+            "Ele está no ar? Confira com `docker compose ps`. Se o Docker Desktop estiver fechado,"
+            " abra-o; se o contêiner estiver parado, rode `docker compose start`.",
+            err=True,
+        )
+        raise typer.Exit(code=2) from None
+    with conn:
+        yield conn
 
 
 @app.command()
@@ -80,7 +102,7 @@ def collect(
             collector = build_collector(fonte, client, settings.request_pause_s)
         except KeyError as exc:
             raise typer.BadParameter(exc.args[0], param_hint="fonte") from None
-        with connect() as conn:
+        with _banco() as conn:
             summary = run_collection(
                 conn, collector, since, until, now=now, on_day=_print_day, redo=refazer
             )
@@ -104,7 +126,7 @@ def embed(
     """Gera o embedding de todo item que ainda não tem (retomável: rode de novo após uma queda)."""
     from nvvs.embed import MODEL_NAME, TEXT_VERSION, count_pending, embed_pending, model_encoder
 
-    with connect() as conn:
+    with _banco() as conn:
         pending = count_pending(conn)
         typer.echo(f"Modelo {MODEL_NAME}, texto v{TEXT_VERSION}: {pending} itens sem vetor.")
         if pending == 0:
