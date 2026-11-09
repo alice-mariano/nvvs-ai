@@ -1,0 +1,662 @@
+{
+ "consultas": [
+  "open-weight LLM release",
+  "prompt injection attacks",
+  "retrieval-augmented generation",
+  "Postgres performance tuning",
+  "WebAssembly runtime",
+  "reinforcement learning for reasoning models",
+  "Kubernetes cluster management",
+  "AI model evaluation benchmarks",
+  "Python type checking",
+  "speech recognition models"
+ ],
+ "entradas": [
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "Rufus-Air: An Open LLM Post-Training Recipe",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "OpenArch – PyTorch implementations of modern LLM architectures",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "What the Model – Local LLM Inventory for macOS",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "RL Framework for Finetuning Openweight Models",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "Faster Local LLMs with iPhone Offloading",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "Open Questions on Open Weights",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "Follow live the open training of a 535B (23B activated) LLM",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "A simple fix for LLM tail latency",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "open-weight LLM release",
+   "titulo": "Rethinking LLM Serving with System One Models",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "prompt injection attacks",
+   "titulo": "Same Bytes, Different Authority: Reserved-Token Representations in Chat-Template Prompt Injection",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "prompt injection attacks",
+   "titulo": "SecOPD: Mitigating Adaptive Prompt Injections by On-Policy Distillation",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "prompt injection attacks",
+   "titulo": ".",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "prompt injection attacks",
+   "titulo": "A ClickFix Attack",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "prompt injection attacks",
+   "titulo": "Security Assessment of DeepSeek Harness with A.I.G: Evaluating Resistance to Indirect Prompt Injection",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "prompt injection attacks",
+   "titulo": "Blazle – Block prompt injection and secret leaks before AI agents act",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "prompt injection attacks",
+   "titulo": "AdvSim2Real : Training Web Agents Against Adaptive Prompt Injection in a Web World Model",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "retrieval-augmented generation",
+   "titulo": "ReMoMask-2: Latent Retrieval-Augmented Masked Motion Generation",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "retrieval-augmented generation",
+   "titulo": "Enhancing Stock Market Information Retrieval with Retrieval-Augmented Generation",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "retrieval-augmented generation",
+   "titulo": "Retrieval Augmented Generation Compositionality",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "retrieval-augmented generation",
+   "titulo": "Investigating the Role of Reasoning-Language Alignment in Monolingual Retrieval-Augmented Generation",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "retrieval-augmented generation",
+   "titulo": "AGO AI Quality Gate: Evidence-First Release Decisions for Retrieval-Augmented Generation",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "retrieval-augmented generation",
+   "titulo": "Signed but Steerable: Measuring and Closing the Text-Vector Integrity Gap in Offline Retrieval-Augmented Generation",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "Postgres performance tuning",
+   "titulo": "PGlite: Embeddable Postgres with real-time, reactive bindings",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Postgres performance tuning",
+   "titulo": "Finding and Fixing Slow Queries with Pg_stat_statements",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "Postgres performance tuning",
+   "titulo": "Postgres Isn't Slow. Your Storage Is",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "Postgres performance tuning",
+   "titulo": "Use.sh: Provision Postgres in <1 second",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Postgres performance tuning",
+   "titulo": "Delete your back end, Your whole stack, inside Postgres",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Postgres performance tuning",
+   "titulo": "Can your Postgres survive a bad query?",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Postgres performance tuning",
+   "titulo": "Postgres 19: How Our Advice Has Changed Since We Wrote It",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "RunMyWealth",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "Running Doom Inside SQL Server",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "Self-Host Software Factory",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "Running untrusted JavaScript inside Elixir with WebAssembly",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "Simple NetBSD Webserver",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "Show HN: Serving static assets with 4.5x higher throughput using eBPF",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "WebMCP in a Dashboard (With AG Studio)",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "Weball",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "WebAssembly runtime",
+   "titulo": "How-to-Dev",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "MetaRubric: Learning to Reward for Rubric-Based Reinforcement Learning",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "Beyond Imitation: Filtering On-Policy Distillation by Reasoning Progress",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "Minimal Witness Reinforcement Learning",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "The Thinking Leakage in Reinforcement Learning for LLMs",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "Rubric-to-Code Credit Assignment for Reinforcement Learning",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "LongR: Unleashing Long-Context Reasoning via Reinforcement Learning with Dense Utility Rewards",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "Hybrid Reasoning Agents",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "Small Language Models as Judges for Rubric-Based Reinforcement Learning",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "Weaken to Strengthen: Weakening-Induced On-Policy Self-Distillation for Large Reasoning Models",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "reinforcement learning for reasoning models",
+   "titulo": "Towards Full Pipeline FP8 Reinforcement Learning for LLMs",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Kubernetes cluster management",
+   "titulo": "Fluorite: a Rust framework for distributed enclave applications on Kubernetes",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Kubernetes cluster management",
+   "titulo": "ClusterDeck, a native Kubernetes client for macOS",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "Kubernetes cluster management",
+   "titulo": "Kubernetes on cgroup v1 is dead. Here's what comes next",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Kubernetes cluster management",
+   "titulo": "Adversary emulation tool for Kubernetes clusters",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Kubernetes cluster management",
+   "titulo": "Kubernetes v1.37: DRA Updates",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "AI model evaluation benchmarks",
+   "titulo": "Benchmark Radar: A Living Database and Search Engine for AI Benchmarks and Evaluation",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "AI model evaluation benchmarks",
+   "titulo": "Local AI Benchmarking, Minisforum MS-S1",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "AI model evaluation benchmarks",
+   "titulo": "CheatBench: Measuring Reward Gaming in AI Agents",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "AI model evaluation benchmarks",
+   "titulo": "Elektric – Benchmark your AI requests across 150 models for cost/quality",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "AI model evaluation benchmarks",
+   "titulo": "WhatWorkedBench: Benchmarking Experimental Understanding in AI Agents",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "AI model evaluation benchmarks",
+   "titulo": "Active Benchmarking",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "AI model evaluation benchmarks",
+   "titulo": "AA-PersonalityBench: AI Personality and Communication Style Benchmark",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "AI model evaluation benchmarks",
+   "titulo": "GLM-5.3 Artificial Analysis Benchmarks",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "Python type checking",
+   "titulo": "Time complexity of operations on Python's built-in types",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Python type checking",
+   "titulo": "Provare – A Typechecker for Your Thoughts",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Python type checking",
+   "titulo": "To Classify, Try a Trie Tree",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Python type checking",
+   "titulo": "Executable Markdown Testing",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Python type checking",
+   "titulo": "DuckDB: Variant Type",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "Python type checking",
+   "titulo": "Type_enforced: Fastest Python Runtime Type Enforcement",
+   "modelos": [
+    "e5_query",
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "Python type checking",
+   "titulo": "Type Safe Generic Data Structures in C (2025)",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "Foundations of Large Language Models",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "Language Models Learn to Improve Language Models",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "SteerDuplex: Steerable Duplex Speech Dialogue Models",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "GSLM2 MultiStream Speech Rep Learning and Gen Spoken Language Modeling",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "Sensor-Language-Action Models",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "Foundations of Large Language Models",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "Building a Production Greek-English Speech Recognizer",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "Measuring benchmark optimization in speech recognition",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 1
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "Mac, out loud – text to speech with open models. No cloud, no analytics",
+   "modelos": [
+    "bge_small"
+   ],
+   "nota": 0
+  },
+  {
+   "consulta": "speech recognition models",
+   "titulo": "Context Language Models",
+   "modelos": [
+    "e5_query"
+   ],
+   "nota": 0
+  }
+ ]
+}

@@ -108,32 +108,36 @@ Cuidados do HF Daily Papers:
 - A verificar: se a lista de um dia já encerrado continua recebendo artigos (rodar a sonda de novo no mesmo dia uma semana depois e comparar a contagem).
 - Upvotes, comentários e estrelas são uma foto do momento da coleta, como os pontos do HN.
 
-## Teste de modelo e texto (08/11)
+## Teste de modelo e texto (08 e 09/11)
 
-Feito antes de gerar os ~93 mil vetores, com `scripts/comparar_modelos.py`. Nada foi gravado no banco.
+Feito antes de fixar o modelo, com `scripts/comparar_modelos.py`. Os vetores do teste ficaram só na memória.
 
-**Parte A: o mesmo artigo nas duas fontes.** 169 pares HN–HF com a mesma chave `arxiv:` (65 com títulos diferentes). Para cada item do HN, procura-se o par do HF num conjunto de 6.042 itens (todo o HF e 3.162 do HN, 52% HN).
+**Parte A: o mesmo artigo nas duas fontes.** 169 pares HN–HF com a mesma chave `arxiv:` (65 com títulos diferentes). Para cada item do HN, procura-se o par do HF num conjunto de 6.042 itens (todo o HF e 3.162 do HN, 52% HN). Outros posts do mesmo artigo no HN ficam fora da disputa. Na primeira rodada eles ficavam dentro e passavam na frente do par, deixando o `r@1` perto de 0,75 em todos os modelos.
 
-| Configuração | `r@1` título | `r@1` título + 400 caracteres do corpo | `hn_top10` título | `hn_top10` título + corpo |
-| --- | --- | --- | --- | --- |
-| `multilingual-e5-small` com `query: ` | 0,75 | 0,47 | 35% | 71% |
-| `multilingual-e5-small` sem prefixo | 0,69 | 0,50 | 31% | 79% |
-| `all-MiniLM-L6-v2` | 0,71 | 0,51 | 33% | 40% |
-| `bge-small-en-v1.5` | 0,77 | 0,49 | 34% | 50% |
+| Configuração | `r@1` título | `r@1_dif` título (65 pares difíceis) | `r@1` título + 400 caracteres do corpo | `hn_top10` título | `hn_top10` título + corpo |
+| --- | --- | --- | --- | --- | --- |
+| `multilingual-e5-small` com `query: ` | 0,90 | 0,85 | 0,64 | 29% | 70% |
+| `multilingual-e5-small` sem prefixo | 0,89 | 0,83 | 0,70 | 25% | 79% |
+| `all-MiniLM-L6-v2` | 0,89 | 0,82 | 0,76 | 27% | 33% |
+| `bge-small-en-v1.5` | 0,90 | 0,74 | 0,67 | 28% | 47% |
 
 - Só o título ganhou nos quatro modelos: com o resumo, o HF vira um parágrafo e o HN continua um título curto, e os vizinhos se separam por fonte.
-- Entre modelos, empate: com 169 pares, a margem de cada `r@1` é de cerca de ±0,07.
-- Defeito corrigido depois desta rodada: outros posts do mesmo artigo no HN passavam na frente do par e deixavam o `r@1` menor do que é, igual para todas as configurações. Os números do README vêm de uma nova rodada.
+- No `r@1` geral, empate. Nos pares de títulos diferentes, o `bge-small-en-v1.5` ficou 11 pontos abaixo do E5, no limite da margem de cerca de ±0,10 com 65 pares.
 
-**Parte B: vizinhos julgados pela autora.** 5 consultas, 5 vizinhos cada, critério "os dois lados do tema precisam aparecer"; regra fixada antes: trocar de modelo só com 3 acertos ou mais de vantagem em 25.
+**Parte B: vizinhos julgados pela autora, sabendo o modelo.** 5 consultas, 5 vizinhos cada, critério "os dois lados do tema precisam aparecer".
 
-| Configuração (só título) | Acertos | Itens do HF entre os 25 vizinhos |
-| --- | --- | --- |
-| `bge-small-en-v1.5` | 8 | 12 |
-| `multilingual-e5-small` com `query: ` | 5 | 6 |
+**Parte C: desempate às cegas (09/11).** 10 consultas novas; os vizinhos dos dois finalistas foram embaralhados e julgados sem saber de qual modelo vinham. Regra fixada antes de rodar: como a Parte A favorecia o E5, o `bge-small-en-v1.5` só ficaria com 3 acertos ou mais de vantagem em 50. Respostas em `docs/teste_cego.json`.
 
-- Decisão: trocar para o `bge-small-en-v1.5`. A evidência é modesta (25 julgamentos, diferença no limiar), mas as duas partes apontam na mesma direção.
-- Concordância entre dois avaliadores (autora e assistente): 49 de 50 julgamentos.
+| Configuração (só título) | Parte B (25) | Parte C, cega (50) | Itens do HF entre os vizinhos da Parte B |
+| --- | --- | --- | --- |
+| `bge-small-en-v1.5` | 8 | 20 | 12 de 25 |
+| `multilingual-e5-small` com `query: ` | 5 | 16 | 6 de 25 |
+
+**Decisão: `bge-small-en-v1.5`, só o título.**
+- Ele ganhou nos dois testes de vizinhos por tema, que medem o que o agrupamento precisa, inclusive no teste cego.
+- Ele perde nos pares do mesmo artigo com títulos diferentes. Na prática, um artigo citado com outras palavras no HN pode ficar longe da versão do HF.
+- A evidência é modesta: 75 julgamentos ao todo, com vantagens de 3 e 4 acertos.
+- Concordância entre dois avaliadores na Parte B (autora e assistente): 49 de 50 julgamentos.
 - Consequência: só inglês; fontes em outra língua exigiriam outro modelo.
 
 ## Decisões da revisão R0 (já aplicadas)
