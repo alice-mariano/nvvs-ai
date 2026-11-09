@@ -23,6 +23,10 @@ dependencies = [
     "sentence-transformers==6.2.0",
     "torch==2.15.0",
     "pgvector==0.5.1",
+    # M3: agrupamento (versões do PyPI em 09/11/2026; todas com pacote pronto para Windows)
+    "umap-learn==0.5.12",
+    "hdbscan==0.8.44",
+    "scikit-learn==1.9.1",
 ]
 
 [project.scripts]
