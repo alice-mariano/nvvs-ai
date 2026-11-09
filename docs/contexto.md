@@ -1,5 +1,7 @@
 # nvvs.ai: contexto do projeto
 
+> Este é o resumo do estado e das decisões em vigor. Requisitos, histórias de usuário, arquitetura, modelo de dados e protocolo de avaliação estão em [`documentacao-v1.md`](documentacao-v1.md). Em caso de conflito entre os dois, vale este arquivo.
+
 Resumo da documentação da V1 para quem revisa o código. Mantido junto com o código; atualizado quando uma decisão muda.
 
 ## Propósito

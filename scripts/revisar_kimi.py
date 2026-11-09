@@ -1,6 +1,7 @@
 """Envia os artefatos de um portão de revisão para a Kimi pela API e salva a resposta (ADR-011).
 
-A Kimi recebe só o briefing fixo (docs/reviews/briefing.md) e os arquivos listados, sem nenhuma
+A Kimi recebe só o briefing fixo (docs/reviews/briefing.md), os documentos de contexto que vão
+sempre (docs/contexto.md e docs/documentacao-v1.md) e os arquivos listados, sem nenhuma
 explicação ou transcrição do Claude. Cada execução é uma conversa nova.
 
 Uso (na raiz do projeto, com a venv ativa):
@@ -25,6 +26,9 @@ ROOT = Path(__file__).resolve().parent.parent
 REVIEWS = ROOT / "docs" / "reviews"
 BRIEFING = REVIEWS / "briefing.md"
 BLOCKED_NAMES = {".env"}
+# Vão em toda revisão, antes dos artefatos do portão: não depende de lembrar de listar
+# (lição do R1-03 e do R2-03). Em conflito entre os dois, vale o contexto.md.
+ALWAYS_SENT = ["docs/contexto.md", "docs/documentacao-v1.md"]
 
 
 class KimiSettings(BaseSettings):
@@ -180,7 +184,7 @@ def main() -> None:
     else:
         if not args.arquivos:
             parser.error("liste os artefatos a enviar")
-        files = args.arquivos
+        files = ALWAYS_SENT + [f for f in args.arquivos if f not in ALWAYS_SENT]
         messages = [
             {"role": "system", "content": briefing},
             {"role": "user", "content": _artifacts_message(gate, files)},
