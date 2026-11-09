@@ -14,10 +14,10 @@ O nvvs.ai detecta temas de IA e engenharia de software que estão **acelerando**
 ## Escopo da V1
 
 **Dentro**
-- Fontes por API: Hacker News (via Algolia) e Hugging Face Daily Papers. GitHub Search está em avaliação para adiamento à V1.1.
+- Fontes por API: Hacker News (via Algolia) e Hugging Face Daily Papers. GitHub Search entra na V1 só se o M3 terminar adiantado: decisão no checkpoint de 13/11, com janela em 15/11, antes da avaliação do M4 (se entrasse depois, a avaliação teria de ser refeita). Senão, fica para a V1.1, depois da inscrição.
 - Histórico inicial de 12 semanas, puxado por data.
 - Coleta incremental e idempotente por dia UTC fechado, retomável sem buracos.
-- Embeddings locais (`intfloat/multilingual-e5-small`, 384 dimensões) no pgvector.
+- Embeddings locais (`BAAI/bge-small-en-v1.5`, 384 dimensões, só o título) no pgvector, escolhidos pelo teste de 08/11 (ver abaixo).
 - Agrupamento UMAP + HDBSCAN sobre a janela de histórico; LLM dá nome e resumo a cada grupo.
 - Métrica de aceleração por tema (total e por fonte) e relatório semanal em Markdown.
 - Avaliação manual com números publicados no README.
@@ -80,7 +80,7 @@ O nvvs.ai detecta temas de IA e engenharia de software que estão **acelerando**
 | 002 | Python. |
 | 003 | PostgreSQL + pgvector. |
 | 004 | SQL escrito à mão com psycopg 3, sem ORM. |
-| 005 | Embeddings locais com modelo pequeno multilíngue. |
+| 005 | Embeddings locais com modelo pequeno: `bge-small-en-v1.5`, sobre o título (contrato v1). Revisto em 08/11 por teste; antes era `multilingual-e5-small`. |
 | 006 | Agrupar a janela inteira a cada execução e contar por semana dentro de cada grupo. Cada relatório é um retrato independente; a estabilidade entre execuções é medida por ARI. |
 | 007 | O LLM só nomeia e resume; a ordem vem da métrica. |
 | 008 | Coleta por data, sob demanda. |
@@ -108,10 +108,38 @@ Cuidados do HF Daily Papers:
 - A verificar: se a lista de um dia já encerrado continua recebendo artigos (rodar a sonda de novo no mesmo dia uma semana depois e comparar a contagem).
 - Upvotes, comentários e estrelas são uma foto do momento da coleta, como os pontos do HN.
 
+## Teste de modelo e texto (08/11)
+
+Feito antes de gerar os ~93 mil vetores, com `scripts/comparar_modelos.py`. Nada foi gravado no banco.
+
+**Parte A: o mesmo artigo nas duas fontes.** 169 pares HN–HF com a mesma chave `arxiv:` (65 com títulos diferentes). Para cada item do HN, procura-se o par do HF num conjunto de 6.042 itens (todo o HF e 3.162 do HN, 52% HN).
+
+| Configuração | `r@1` título | `r@1` título + 400 caracteres do corpo | `hn_top10` título | `hn_top10` título + corpo |
+| --- | --- | --- | --- | --- |
+| `multilingual-e5-small` com `query: ` | 0,75 | 0,47 | 35% | 71% |
+| `multilingual-e5-small` sem prefixo | 0,69 | 0,50 | 31% | 79% |
+| `all-MiniLM-L6-v2` | 0,71 | 0,51 | 33% | 40% |
+| `bge-small-en-v1.5` | 0,77 | 0,49 | 34% | 50% |
+
+- Só o título ganhou nos quatro modelos: com o resumo, o HF vira um parágrafo e o HN continua um título curto, e os vizinhos se separam por fonte.
+- Entre modelos, empate: com 169 pares, a margem de cada `r@1` é de cerca de ±0,07.
+- Defeito corrigido depois desta rodada: outros posts do mesmo artigo no HN passavam na frente do par e deixavam o `r@1` menor do que é, igual para todas as configurações. Os números do README vêm de uma nova rodada.
+
+**Parte B: vizinhos julgados pela autora.** 5 consultas, 5 vizinhos cada, critério "os dois lados do tema precisam aparecer"; regra fixada antes: trocar de modelo só com 3 acertos ou mais de vantagem em 25.
+
+| Configuração (só título) | Acertos | Itens do HF entre os 25 vizinhos |
+| --- | --- | --- |
+| `bge-small-en-v1.5` | 8 | 12 |
+| `multilingual-e5-small` com `query: ` | 5 | 6 |
+
+- Decisão: trocar para o `bge-small-en-v1.5`. A evidência é modesta (25 julgamentos, diferença no limiar), mas as duas partes apontam na mesma direção.
+- Concordância entre dois avaliadores (autora e assistente): 49 de 50 julgamentos.
+- Consequência: só inglês; fontes em outra língua exigiriam outro modelo.
+
 ## Decisões da revisão R0 (já aplicadas)
 
 - A API da Algolia limita cada consulta a 1.000 resultados: a janela é dividida ao meio até caber, enquanto for maior que 1 hora (a menor consulta tem entre 30 e 60 minutos); se ainda passar do limite, o dia fica `partial`.
 - Uma URL malformada não derruba a gravação do dia: a chave canônica do item cai para `<fonte>:<id>` (R1).
 - Datas em `timestamptz` UTC, janelas semiabertas `[início, fim)`, semana ISO fechada.
 - Sem filtro de pontos na coleta; o recorte de escopo (IA e engenharia de software) fica na análise.
-- O texto usado no embedding terá contrato versionado no M2 (prefixo `query: ` do E5 para agrupamento).
+- O texto usado no embedding tem contrato versionado (`text_version`), com teste de regressão de formato, normalização e 384 dimensões. A versão 1 está em `src/nvvs/embed.py` e no `002_embeddings.sql`. O prefixo `query: ` previsto no R0 era do E5 e saiu com a troca de modelo (08/11).

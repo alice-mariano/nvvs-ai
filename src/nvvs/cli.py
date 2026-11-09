@@ -1,4 +1,9 @@
-"""Linha de comando do nvvs.ai. Uso: nvvs collect <fonte> [--desde AAAA-MM-DD] [--ate AAAA-MM-DD]"""
+"""Linha de comando do nvvs.ai.
+
+Uso:
+    nvvs collect <fonte> [--desde AAAA-MM-DD] [--ate AAAA-MM-DD]
+    nvvs embed [--lote N]
+"""
 
 import time
 from datetime import UTC, date, datetime
@@ -79,3 +84,27 @@ def collect(
         typer.echo("Coleta interrompida após falhas seguidas. Confira a rede e rode de novo.")
     if summary.failed:
         raise typer.Exit(code=1)
+
+
+@app.command()
+def embed(
+    lote: int = typer.Option(1000, min=1, help="Itens por lote gravado no banco."),
+) -> None:
+    """Gera o embedding de todo item que ainda não tem (retomável: rode de novo após uma queda)."""
+    from nvvs.embed import MODEL_NAME, TEXT_VERSION, count_pending, embed_pending, model_encoder
+
+    with connect() as conn:
+        pending = count_pending(conn)
+        typer.echo(f"Modelo {MODEL_NAME}, texto v{TEXT_VERSION}: {pending} itens sem vetor.")
+        if pending == 0:
+            return
+        typer.echo("Carregando o modelo...")
+        encode = model_encoder()
+
+        def progress(done: int, seconds: float) -> None:
+            rate = done / seconds if seconds else 0
+            typer.echo(f"  {done:>6} / {pending}  ({rate:.0f} itens/s)")
+
+        report = embed_pending(conn, encode, batch_size=lote, on_batch=progress)
+
+    typer.echo(f"\nResumo: {report.embedded} vetores gravados em {report.seconds:.0f} s.")
